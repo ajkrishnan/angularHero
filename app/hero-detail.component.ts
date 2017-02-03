@@ -11,15 +11,7 @@ import { Hero } from './hero';
         <input [(ngModel)]="hero.name" placeholder="name"/>
       </div>
     </div>
-  `,
-  styles: [`
-    .details {
-      width: 60%;
-      float: left;
-      text-align: center;
-      margin-top: 10%;
-    }
-  `]
+  `
 })
 export class HeroDetailComponent {
   @Input()

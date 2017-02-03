@@ -1,52 +1,30 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero';
-
-// export class Hero {
-//   id: number;
-//   name: string;
-// }
-
-const HEROES: Hero[] = [
-  { id: 1, name: 'WOLVERINE' },
-  { id: 2, name: 'DEADPOOL' },
-  { id: 3, name: 'BATMAN' },
-  { id: 4, name: 'SUPERMAN' },
-  { id: 5, name: 'SPIDERMAN' },
-  { id: 6, name: 'JEAN' },
-  { id: 7, name: 'IRONMAN' },
-  { id: 8, name: 'SHAKTIMAN' },
-  { id: 9, name: 'KRISH' },
-  { id: 10, name: 'DINGAN' }
-];
-
+import { HeroService } from './hero.service';
 @Component({
   selector: 'my-app',
-  template:  `
-    <h1 class="alignText">{{title}}</h1>
-    <h2 class="alignText">My Heroes actually rockzzz....</h2>
+  template: `
+    <h1>{{title}}</h1>
+    <h2>My Heroes</h2>
     <ul class="heroes">
-      <li *ngFor="let person of heroes"
-        [class.selected]="person === selectedHero"
-        (click)="onSelect(person)">
-        <span class="badge">{{person.id}}</span> {{person.name}}
+      <li *ngFor="let hero of heroes"
+        [class.selected]="hero === selectedHero"
+        (click)="onSelect(hero)">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
       </li>
     </ul>
     <my-hero-detail [hero]="selectedHero"></my-hero-detail>
   `,
   styles: [`
-  	.alignText {
-  		text-align: center;
-  	}
     .selected {
       background-color: #CFD8DC !important;
       color: white;
     }
     .heroes {
+      margin: 0 0 2em 0;
       list-style-type: none;
-	    padding: 0;
-	    float: left;
-	    width: 30%;
+      padding: 0;
+      width: 15em;
     }
     .heroes li {
       cursor: pointer;
@@ -85,20 +63,21 @@ const HEROES: Hero[] = [
       margin-right: .8em;
       border-radius: 4px 0 0 4px;
     }
-    .details {
-    	width: 60%;
-	    float: left;
-	    text-align: center;
-	    margin-top: 10%;
-    }
-  `]
+  `],
+  providers: [HeroService]
 })
-
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Tour of Heroes';
-  heroes = HEROES;
+  heroes: Hero[];
   selectedHero: Hero;
-  onSelect(person: Hero): void {
-    this.selectedHero = person;
+  constructor(private heroService: HeroService) { }
+  getHeroes(): void {
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
   }
 }
